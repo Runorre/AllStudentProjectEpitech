@@ -1,0 +1,13 @@
+Max fourmis : 30
+Max tunnels (vertex) : ?
+faire tout le parsing et check à la fin, si pas bon, on affiche juste et on sort sans faire l'algo.
+13 tests de gestion d'erreur
+double start double end
+Envoyer un dossier dedans
+deux éléments dans la room
+si deux noms pareils
+FICHIER VIDE
+les noms de room sont associés aux tunnels, il faut bien le parse
+si room à la fin, alors elle doit être traitée au début
+inexistant rooms
+impossible runs (no connexion)

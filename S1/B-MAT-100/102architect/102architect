@@ -1,0 +1,91 @@
+#!/usr/bin/env python3
+
+import math
+import sys
+
+def showh():
+    print("USAGE\n  ./102architect x y transfo1 arg11 [arg12] [transfo2 arg21 [arg22]] ...")
+    print("DESCRIPTION\n    x abscissa of the original point")
+    print("    y ordinate of the original point\n")
+    print("transfo arg1 [arg2]")
+    print("    -t i j translation along vector (i, j)")
+    print("    -z m n scaling by factors m (x-axis) and n (y-axis)")
+    print("    -r d rotation centered in O by a d degree angle")
+    print("    -s d reflection over the axis passing through O with an inclination angle of d degrees")
+
+def translation(i, j, x, y):
+    print("Translation along vector ({0}, {1})".format(i, j))
+    matrix = [0, 0]
+    matrix[0] = x
+    matrix[0] += i
+    matrix[1] = y
+    matrix[1] += j
+    print("1.00   0.00   {0:.2f}".format(i))
+    print("0.00   1.00   {0:.2f}".format(j))
+    print("0.00   1.00   1.00")
+    print("({0:.2f}, {0:.2f}) => ({0:.2f}, {0:.2f})".format(x,y,matrix[0],matrix[1]))
+
+def scaling(m, n, x, y):
+    matrix = [0, 0]
+    matrix[0] = x * m
+    matrix[1] = y * n
+    print("{0:.2f}   0.00   0.00".format(m))
+    print("0.00   {0:.2f}   0.00".format(n))
+    print("0.00   1.00   1.00")
+    print("({0:.2f}, {0:.2f}) => ({0:.2f}, {0:.2f})".format(x,y,matrix[0],matrix[1]))
+    return matrix[0], matrix[1]
+
+def rotation(d, x, y):
+    matrix = [0, 0]
+    drad = math.radians(d)
+    matrix[0] = math.cos(drad) * x
+    matrix[0] += (-math.sin(drad)) * y
+    matrix[1] = math.sin(drad) * x
+    matrix[1] += math.cos(drad) * y
+    print("{0:.2f}   {0:.2f}   0.00".format(math.cos(drad), (-math.sin(drad))))
+    print("{0:.2f}   {0:.2f}   0.00".format(math.sin(drad), math.cos(drad)))
+    print("0.00   1.00   1.00")
+    print("({0:.2f}, {0:.2f}) => ({0:.2f}, {0:.2f})".format(x,y,matrix[0],matrix[1]))
+    return matrix[0], matrix[1]
+
+def reflection(d, x, y):
+    matrix = [0, 0]
+    drad = math.radians(d)
+    matrix[0] = math.cos(2*drad) * x
+    matrix[0] += math.sin(2*drad) * y
+    matrix[1] = math.sin(2*drad) * x
+    matrix[1] += (-math.cos(2*drad)) * y
+    print("{0:.2f}   {0:.2f}   0.00".format(math.cos(2*drad), math.sin(2*drad)))
+    print("{0:.2f}   {0:.2f}   0.00".format(math.sin(2*drad), (-math.cos(2*drad))))
+    print("0.00   1.00   1.00")
+    print("({0:.2f}, {0:.2f}) => ({0:.2f}, {0:.2f})".format(x,y,matrix[0],matrix[1]))
+
+def search(x, y, option, value):
+    if option == "-t" and value + 1 <= len(sys.argv) - 1:
+        translation(int(sys.argv[value]), int(sys.argv[value + 1]), x, y)
+        return (value + 2)
+    if option == "-z" and value +1 <= len(sys.argv) - 1:
+        scaling(int(sys.argv[value]), int(sys.argv[value + 1]), x, y)
+        return (value + 2)
+    if option == "-r" and value <= len(sys.argv) - 1:
+        rotation(int(sys.argv[value]), x, y)
+        return (value + 1)
+    if option == "-s" and value <= len(sys.argv) - 1:
+        reflection(int(sys.argv[value]), x, y)
+        return (value + 1)
+    return (-1)
+
+if len(sys.argv) == 2 and sys.argv[1] == "-h":
+    showh()
+elif (len(sys.argv) > 3):
+    x = int(sys.argv[1])
+    y = int(sys.argv[2])
+    g = 3
+    while (g < len(sys.argv) and g >= 3):
+        g = search(x, y , sys.argv[g], g + 1)
+    if g == -1:
+        exit(84)
+    else:
+        exit(0)
+else:
+    exit(84)

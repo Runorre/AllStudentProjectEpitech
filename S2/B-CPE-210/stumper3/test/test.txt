@@ -1,0 +1,10 @@
+Myxqbkdevkdsyxc, iye cemmoonon sx nombizdsxq drsc wocckqo
+
+Dro bokv celtomd sc dy gbsdo k zbyqbkw dy oxmbizd k psvo yb
+cdbsxq kxn gbsdo dro bocevd sx k psvo xkwon 'mbizd'.
+Dy oxmbizd k psvo go gsvv eco dro '-p' zkbkwodob, pyb k cdbsxq go gsvv eco '-c'.
+
+Csxmo sd sc k mbizdon psvo, xylyni cryevn lo klvo dy wynspi sdc myxdoxdc,
+drkd'c gri iyeb zbyqbkw cryevn cod dro bokn-yxvi bsqrdc dy dro 'mbizd' psvo.
+
+Eckqo: ./mockb -p psvoxkwo uoi YB ./mockb -c "cdbsxq" uoi

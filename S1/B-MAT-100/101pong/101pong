@@ -1,0 +1,62 @@
+#!/usr/bin/env python3
+
+import math
+import sys
+
+def flagh():
+    print("USAGE\n      ./101pong x0 y0 z0 x1 y1 z1 n")
+    print("DESCRIPTION")
+    print("     x0 ball abscissa at time t - 1")
+    print("     y0 ball ordinate at time t - 1")
+    print("     z0 ball altitude at time t - 1")
+    print("     x1 ball abscissa at time t")
+    print("     y1 ball ordinate at time t")
+    print("     z1 ball altitude at time t")
+    print("     n time shift (greater than or equal to zero, integer)")
+
+def verify(data):
+    if (int(data[7]) < 0):
+        return False
+    for i in range(1, len(data)):
+        try:
+            float(data[i])
+        except:
+            return False
+    return True
+
+def velocity(data):
+    x = float(data[3]) - float(data[0])
+    y = float(data[4]) - float(data[1])
+    z = float(data[5]) - float(data[2])
+    print("The velocity vector of the ball is:")
+    print("({0:.2f}, {1:.2f}, {2:.2f})".format(x, y, z))
+    return (x, y, z)
+
+def timemove(velo, data):
+    x = velo[0] * int(data[3]) + float(data[0])
+    y = velo[1] * int(data[3]) + float(data[1])
+    z = velo[2] * int(data[3]) + float(data[2])
+    print("At time t + {}, ball coordinates will be:".format(data[3]))
+    print("({0:.2f}, {1:.2f}, {2:.2f})".format(x, y, z))
+
+def angle(velo):
+    norme = math.sqrt((float(velo[0]) ** 2) + (float(velo[1]) ** 2) + (float(velo[2]) ** 2))
+    rad = math.asin(math.sqrt(velo[2] ** 2 ) / norme)
+    if math.degrees(rad) > 0:
+        print("The incidence angle is:\n{0:.2f} degrees".format(math.degrees(rad)))
+    else:
+        print("The ball won’t reach the paddle.")
+
+if len(sys.argv) == 2 and sys.argv[1] == "-h":
+    flagh()
+    exit(0)
+elif len(sys.argv) == 8 and verify(sys.argv):
+    velo = velocity(sys.argv[1:])
+    timemove(velo, sys.argv[4:])
+    if int(sys.argv[6]) > 0:
+        angle(velo)
+    else :
+        print("The ball won’t reach the paddle.")
+    exit(0)
+else :
+    exit(84)

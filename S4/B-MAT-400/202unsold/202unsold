@@ -1,0 +1,102 @@
+#!/usr/bin/env python3
+##
+## EPITECH PROJECT, 2024
+## B-MAT-400-MAR-4-1-202unsold-celestin.godefroy-mourier
+## File description:
+## 202unsold
+##
+
+from sys import *
+from math import *
+import re
+
+def put_h():
+    print("USAGE\n    ./202unsold a b")
+    print("\nDescription")
+    print("    a     constant computed from past results")
+    print("    b     constant computed from past results")
+    
+def print_XY(tabXY, law_val_X, law_val_Y, expected_X, expected_Y, law_val_Z, expected_Z, variance_X):
+    final_val = 0
+    for val in law_val_X:
+        final_val += val
+
+    print("--------------------------------------------------------------------------------")
+    print("         X=10    X=20    X=30    X=40    X=50    Y law")
+    print("Y=10     ","%.3f" %tabXY[0][0],"   ","%.3f" %tabXY[1][0],"   ","%.3f" %tabXY[2][0],"   ","%.3f" %tabXY[3][0],"   ","%.3f" %tabXY[4][0],"   ","%.3f" %law_val_Y[0],"", sep="")
+    print("Y=20     ","%.3f" %tabXY[0][1],"   ","%.3f" %tabXY[1][1],"   ","%.3f" %tabXY[2][1],"   ","%.3f" %tabXY[3][1],"   ","%.3f" %tabXY[4][1],"   ","%.3f" %law_val_Y[1],"", sep="")
+    print("Y=30     ","%.3f" %tabXY[0][2],"   ","%.3f" %tabXY[1][2],"   ","%.3f" %tabXY[2][2],"   ","%.3f" %tabXY[3][2],"   ","%.3f" %tabXY[4][2],"   ","%.3f" %law_val_Y[2],"", sep="")
+    print("Y=40     ","%.3f" %tabXY[0][3],"   ","%.3f" %tabXY[1][3],"   ","%.3f" %tabXY[2][3],"   ","%.3f" %tabXY[3][3],"   ","%.3f" %tabXY[4][3],"   ","%.3f" %law_val_Y[3],"", sep="")
+    print("Y=50     ","%.3f" %tabXY[0][4],"   ","%.3f" %tabXY[1][4],"   ","%.3f" %tabXY[2][4],"   ","%.3f" %tabXY[3][4],"   ","%.3f" %tabXY[4][4],"   ","%.3f" %law_val_Y[4],"", sep="")
+    print("X law    ","%.3f" %law_val_X[0],"   ","%.3f" %law_val_X[1],"   ","%.3f" %law_val_X[2],"   ","%.3f" %law_val_X[3],"   ","%.3f" %law_val_X[4],"   ","%.3f" %final_val,"", sep="")
+    print("--------------------------------------------------------------------------------")
+    print("z        20      30      40      50      60      70      80      90      100")
+    print("p(Z=z)  ","%.3f" %law_val_Z[0]," ","%.3f" %law_val_Z[1]," ","%.3f" %law_val_Z[2]," ","%.3f" %law_val_Z[3]," ","%.3f" %law_val_Z[4]," ","%.3f" %law_val_Z[5]," ","%.3f" %law_val_Z[6]," ","%.3f" %law_val_Z[7]," ","%.3f" %law_val_Z[8])
+    print("--------------------------------------------------------------------------------")
+    print("expected value of X:    ","%.1f" %expected_X)
+    print("variance of X:          ","%.1f" %variance_X)
+    print("expected value of Y:    ","%.1f" %expected_Y)
+    print("variance of Y:          ","%.1f" %variance_Y)
+    print("expected value of Z:    ","%.1f" %expected_Z)
+    print("variance of Z:          ","%.1f" %(variance_X + variance_Y))
+    print("--------------------------------------------------------------------------------")
+
+    
+
+
+if (len(argv) == 2):
+    if (argv[1] == "-h"):
+        put_h()
+    else:
+        exit(84)
+        
+if(len(argv) != 2 and len(argv) != 3):
+    exit(84)
+
+X = [10, 20, 30, 40, 50]
+Y = [10, 20, 30, 40, 50]
+
+if (argv[1].isdigit() and argv[2].isdigit()):
+    j = 0
+    a = int(argv[1])
+    b = int(argv[2])
+    if (a < 50 or b < 50):
+        exit(84)
+    tabXY = []
+    law_val_X = []
+    law_val_Y = []
+    law_val_Z = []
+    moy_X = 0
+    moy_Y = 0
+    moy_Z = 0
+    expected_X = 0
+    expected_Y = 0
+    expected_Z = 0
+    variance_X = 0
+    variance_Y = 0
+    for val_X in X:
+        tmp = []
+        for val_Y in Y:
+            tmp.append(((a - val_X)*(b - val_Y))/((5*a-150)*(5*b-150)))
+        tabXY.append(tmp)
+    for i in range(0, 5):
+        law_val_X.append(tabXY[i][0] + tabXY[i][1] + tabXY[i][2] + tabXY[i][3] + tabXY[i][4])
+        expected_X += (10+(10*i))*law_val_X[i]
+        moy_X += (law_val_X[i]/4)
+    for i in range(0, 5):
+        variance_X += (((10+(10*i) - expected_X)**2)*law_val_X[i])
+    for i in range(0, 5):
+        law_val_Y.append(tabXY[0][i] + tabXY[1][i] + tabXY[2][i] + tabXY[3][i] + tabXY[4][i])
+        expected_Y += (10+(10*i))*law_val_Y[i]
+    for i in range(0, 5):
+        variance_Y += (((10+(10*i) - expected_Y)**2)*law_val_Y[i])
+    for z in range(20, 101, 10):
+        law_val_Z.append(sum(tabXY[i][j] for i in range(5) for j in range(5) if (i + 1) * 10 + (j + 1) * 10 == z))
+    for i in range(0, 9):
+        expected_Z += (20+(10*i))*law_val_Z[i]
+    print_XY(tabXY, law_val_X, law_val_Y, expected_X, expected_Y, law_val_Z, expected_Z, variance_X)
+else:
+    exit(84)
+
+
+

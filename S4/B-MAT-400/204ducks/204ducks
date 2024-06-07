@@ -1,0 +1,77 @@
+#!/usr/bin/env python3
+##
+## EPITECH PROJECT, 2024
+## B-MAT-400-MAR-4-1-204ducks-celestin.godefroy-mourier
+## File description:
+## 204ducks
+##
+
+from sys import *
+from math import *
+
+def proba(a, t):
+    return a * exp(-t) + (4 - 3 * a) * exp(-2 * t) + (2 * a - 4) * exp(-4 * t)
+
+def overproba(a, t):
+    return -a * exp(-t) - (4 - 3 * a) / 2 * exp(-2 * t) - (2 * a - 4) / 4 * exp(-4 * t)
+
+def get_average_time(a):
+    result = float(0)
+    t = float(0)
+    while t < 10:
+        result += proba(a, t) * t / 1000
+        t += 0.001
+    return result
+
+def get_deviation(a, average_time):
+    result = float(0)
+    t = float(0)
+    while t < 100:
+        result += pow(t - average_time, 2) * proba(a, t) / 1000
+        t += 0.001
+    result = sqrt(result)
+    return result
+
+def get_come_back(a, percent):
+    t = 0.0
+    while t < 1000:
+        if overproba(a, t / 60) - overproba(a, 0) >= percent:
+            return t
+        t += 0.002
+
+def h():
+    print("USAGE\n    ./204ducks a\n\nDESCRIPTION\n    a       constant (between 0 and 2.5)")
+
+if (len(argv) == 2 and argv[1] == "-h"):
+    h()
+    exit(0)
+    
+if (len(argv) != 2):
+    exit(84)
+
+if (float(argv[1]) < 0 or float(argv[1]) > 2.5):
+    exit(84)
+
+a = float(argv[1])
+average_time = get_average_time(a)
+print("Average return time: ", str(int(average_time)), "m ",ceil((average_time - int(average_time)) * 60), "s", sep="")
+
+derivation = get_deviation(a, average_time)
+print("Standard deviation:", "%.3f" % derivation)
+
+time_50 = get_come_back(a, 0.5)
+print("Time after which 50% of the ducks are back: ", int(time_50 // 60), "m ", int ((time_50 % 60) // 10), int((time_50 % 60) % 10), "s", sep="")
+
+time_99 = get_come_back(a, 0.99)
+print("Time after which 99% of the ducks are back: ", int(time_99 // 60), "m ", int ((time_99 % 60) // 10), int((time_99 % 60) % 10), "s", sep="")
+
+back_1 = (overproba(a, 1) - overproba(a, 0)) * 100
+print("Percentage of ducks back after 1 minute: ", "%.1f" % back_1, "%", sep="")
+
+back_2 = (overproba(a, 2) - overproba(a, 1)) * 100
+print("Percentage of ducks back after 2 minutes: ", "%.1f" % back_2, "%", sep="")
+
+
+
+
+

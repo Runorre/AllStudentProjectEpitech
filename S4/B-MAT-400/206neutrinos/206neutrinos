@@ -1,0 +1,71 @@
+#!/usr/bin/env python3
+##
+## EPITECH PROJECT, 2024
+## B-MAT-400-MAR-4-1-206neutrinos-celestin.godefroy-mourier
+## File description:
+## 206neutrinos
+##
+
+from sys import *
+from math import *
+
+def print_usage():
+    print("USAGE")
+    print("    ./206neutrinos n a h sd")
+    print("DESCRIPTION")
+    print("    n\t    number of values")
+    print("    a\t    arithmetic mean")
+    print("    h\t    harmonic mean")
+    print("    sd\t    standard deviation")
+
+def newArithmeticMean (n, a, value):
+    return ((a * (n - 1)) + value) / n
+
+def RootMeanSquare(a, value, n, sd):
+    nb = (pow(sd, 2) + pow(a, 2)) * (n + 1)
+    return sqrt(nb / (n + 1))
+
+def HarmonicMean(n, h, value):
+    nb = n / h
+    return (n + 1) / (nb + (1 / value))
+
+
+def StandardDeviation(n, a, value, sd):
+    return sqrt(((pow(sd, 2) * (n - 1)) + pow(value - a, 2)) / n)
+
+def core (n, a, h, sd):
+    newn = 0
+    newa = 0
+    newh = 0
+    newsd = 0
+    while (1) :
+        print("Enter next value: ", end="")
+        value = input()
+        if (value == "END"):
+            break
+        if (value.isdigit() == False):
+            print("Invalid input")
+        else:
+            n += 1
+            sd = StandardDeviation(n, a, int(value), sd)
+            a = newArithmeticMean(n, a, int(value))
+            rms = RootMeanSquare(a, int(a), n, sd)
+            h = HarmonicMean(n, h, int(value))
+            print("   Number of values:   ", n)
+            print("   Standard deviation: ", round(sd, 2))
+            print("   Arithmetic mean:    ", round(a, 2))
+            print("   Root mean square:   ", round(rms, 2))
+            print("   Harmonic mean:      ", round(h, 2))
+            print("")
+
+if (len(argv) == 2 and argv[1] == "-h"):
+    print_usage()
+    exit(0)
+
+if (len (argv) != 5):
+    exit(84)
+
+if (argv[1].isdigit() == False or argv[2].isdigit() == False or argv[3].isdigit() == False or argv[4].isdigit() == False):
+    exit(84)
+
+core(int(argv[1]), int(argv[2]), int(argv[3]), int(argv[4]))

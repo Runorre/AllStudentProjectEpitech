@@ -1,0 +1,179 @@
+#!/usr/bin/env python3
+##
+## EPITECH PROJECT, 2024
+## B-MAT-400-MAR-4-1-207demography-celestin.godefroy-mourier
+## File description:
+## 207demography
+##
+
+from sys import *
+from csv import *
+from math import *
+
+with open('207demography_data.csv', 'r') as file:
+    reader = reader(file, delimiter=';')
+    data = list(reader)
+name_index = data[0].index('Country Name')
+code_index = data[0].index('Country Code')
+
+def get_country_data(Country_code):
+    for row in data[1:]:
+        if row[code_index] == Country_code:
+            return row
+    exit(84)
+
+def get_a_b_fit1(row):
+    x = 0
+    for i in range(2, len(row)):
+        x += int(data[0][i])
+    y = 0
+    for i in range(2, len(row)):
+        y += float(row[i])
+    xx = 0
+    for i in range(2, len(row)):
+        xx += int(data[0][i]) * int(data[0][i])
+    xy = 0
+    for i in range(2, len(row)):
+        xy += int(data[0][i]) * float(row[i])
+    yy = 0
+    for i in range(2, len(row)):
+        yy += float(row[i]) * float(row[i])
+    a = (len(row) - 2) * xy - x * y
+    a = a / ((len(row) - 2) * xx - x * x)
+    b = y * xx - x * xy
+    b = b / ((len(row) - 2) * xx - x * x)
+    return a, b
+
+def get_a_b_fit2(row):
+    x = 0
+    for i in range(2, len(row)):
+        x += int(data[0][i])
+    y = 0
+    for i in range(2, len(row)):
+        y += float(row[i])
+    xx = 0
+    for i in range(2, len(row)):
+        xx += int(data[0][i]) * int(data[0][i])
+    xy = 0
+    for i in range(2, len(row)):
+        xy += int(data[0][i]) * float(row[i])
+    yy = 0
+    for i in range(2, len(row)):
+        yy += float(row[i]) * float(row[i])
+    a = (len(row) - 2) * xy - y * x
+    a = a / ((len(row) - 2) * yy - y * y)
+    b = x * yy - y * xy
+    b = b / ((len(row) - 2) * yy - y * y)
+    return a, b
+    
+def root_mean_square(row, a, b):
+    y = 0
+    y2 = 0
+    res = 0
+    for i in range(2, len(row)):
+        y = float(row[i])
+        y2 = float(data[0][i]) * a + b
+        res += (y - y2) ** 2
+    res = res / (len(row) - 2)
+    return sqrt(res)
+
+def root_mean_square_fit2(row, a, b):
+    x = 0
+    x2 = 0
+    res = 0
+    for i in range(2, len(row)):
+        x = float(row[i])
+        x2 = (float(data[0][i]) - b) / a
+        res += (x - x2) ** 2
+    res = res / (len(row) - 2)
+    return sqrt(res)
+
+def correlation(row, a, b):
+    moyx = 0
+    moyy = 0
+    covar = 0
+    varx = 0
+    vary = 0
+    res = 0
+    n = 0
+    for i in range (2, len(row)):
+        moyx += float(row[i])
+        moyy += float(data[0][i])
+        n += 1
+    moyx = moyx / n
+    moyy = moyy / n
+    for i in range(2, len(row)):
+        covar += (float(row[i]) - moyx) * (float(data[0][i]) - moyy)
+        varx += (float(row[i]) - moyx) ** 2
+        vary += (float(data[0][i]) - moyy) ** 2
+    covar = covar * (1 / n)
+    varx = varx * (1 / n)
+    vary = vary * (1 / n)
+    return covar / sqrt(varx * vary)
+
+
+def help():
+    print("USAGE")
+    print("    ./207demography [code]+\n")
+    print("DESCRIPTION")
+    print("    code    country code")
+    
+if (argv[1] == "-h" and len(argv) == 2):
+    help()
+    exit(0)
+    
+if (len(argv) < 2 or len(argv) > 4):
+    exit(84)
+
+elem = [[]]
+for i in range(1, len(argv)):
+    elem.append(get_country_data(argv[i]))
+
+a = 0
+b = 0
+for i in range(1, len(elem)):
+    a += get_a_b_fit1(elem[i])[0]
+    b += get_a_b_fit1(elem[i])[1]
+print ("Country: ", end="")
+for i in range(1, len(elem)):
+    print(elem[i][name_index], end="")
+    if i != len(elem) - 1:
+        print(", ", end="")
+print("")
+print("Fit1")
+if b < 0:
+    print("    Y = %.2f X - %.2f" % (a * 0.000001, -b * 0.000001))
+else:
+    print("    Y = %.2f X + %.2f" % (a * 0.000001, b * 0.000001))
+
+square = 0
+for i in range(1, len(elem)):
+    square += root_mean_square(elem[i], a, b)
+print("    Root-mean-square deviation: %.2f" %(square * 0.000001))
+pop = a * 2050 + b
+print("    Population in 2050: %.2f" %(pop * 0.000001))
+a = 0
+b = 0
+for i in range(1, len(elem)):
+    a += get_a_b_fit2(elem[i])[0]
+    b += get_a_b_fit2(elem[i])[1]
+print("Fit2")
+if b < 0:
+    print("    Y = %.2f Y - %.2f" % (a * 1000000, -b))
+else:
+    print("    Y = %.2f Y + %.2f" % (a * 1000000, b))
+square = 0
+for i in range(1, len(elem)):
+    square += root_mean_square_fit2(elem[i], a, b)
+print("    Root-mean-square deviation: %.2f" %(square * 0.000001))
+pop =((2050 - b) / a)
+print("    Population in 2050: %.2f" %(pop * 0.000001))
+cor = 0
+for i in range(1, len(elem)):
+    cor += correlation(elem[i], a, b)
+print("Correlation: %.4f" %(cor))
+
+    
+
+
+

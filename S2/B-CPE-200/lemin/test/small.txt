@@ -1,0 +1,16 @@
+25
+##start
+Seb 3 100
+##end
+Salut 49 2 #bedroomlole
+bonjour 4 1
+# The ROOM
+42 9 0
+Joan 5 6
+Eve 5 6
+Seb-42
+Seb-Seb
+Joan-Seb
+Salut-bonjour
+bonjour-42
+Joan-Eve

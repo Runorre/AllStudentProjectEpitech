@@ -1,0 +1,154 @@
+#!/usr/bin/env python3
+##
+## EPITECH PROJECT, 2024
+## 201yams
+## File description:
+## main
+##
+
+from sys import *
+from math import *
+import re
+
+def put_h():
+    print("USAGE\n    ./201yams d1 d2 d3 d4 d5 c")
+    print("\nDescription")
+    print("    d1     value of the first dice (0 if not thrown)")
+    print("    d2     value of the second dice (0 if not thrown)")
+    print("    d3     value of the third dice (0 if not thrown)")
+    print("    d4     value of the fourth dice (0 if not thrown)")
+    print("    d5     value of the fifth dice (0 if not thrown)")
+    print("    c      expected combination")
+
+def caluclate_binomial(N, K):
+    return comb(N, K) * (1/6)**K * (5/6)**(N-K)
+
+def pair(number):
+    chiffre = number.group(0)
+    proba = 0
+    i = 0
+    for arg in argv[1:len(argv) - 1]:
+        if chiffre == arg:
+            i+= 1
+    N = 5 - i
+    K = 2- i
+    for j in range (K, 6-i):
+        proba += caluclate_binomial(N, j)
+    proba *= 100
+    
+    print("Chances to get a ", int(chiffre), " pair: ", "%.2f" %proba, "%", sep="")
+
+    
+def three(number):
+    chiffre = number.group(0)
+    proba = 0
+    i = 0
+    for arg in argv[1:len(argv) - 1]:
+        if chiffre == arg:
+            i+= 1
+    N = 5 - i
+    K = 3 - i
+    for j in range (K, 6-i):
+        proba += caluclate_binomial(N, j)
+    proba *= 100
+    print("Chances to get a ", int(chiffre), " three-of-a-kind: ", "%.2f" %proba, "%", sep="")
+    
+def four(number):
+    chiffre = number.group(0)
+    proba = 0
+    i = 0
+    for arg in argv[1:len(argv) - 1]:
+        if chiffre == arg:
+            i+= 1
+    N = 5 - i
+    K = 4 - i
+    for j in range (K, 6-i):
+        proba += caluclate_binomial(N, j)
+    proba *= 100
+    print("Chances to get a ", int(chiffre), " four-of-a-kind: ", "%.2f" %proba, "%", sep="")
+
+    
+def straight(number):
+    chiffre = int(number.group(0))
+    proba = 0
+    i = 0
+    tmp = []
+    for arg in argv[1:len(argv) - 1]:
+        if chiffre - 5 <= int(arg) <= chiffre and arg not in tmp:
+            tmp.append(arg)
+            i+= 1
+    proba = factorial(5 - i) / (6 ** (5-i))
+    proba = proba * 100
+    if chiffre < 5:
+        proba = 0
+    print("Chances to get a ", int(chiffre), " straight: ", "%.2f" %proba, "%", sep="")
+    
+def yams(number):
+    chiffre = number.group(0)
+    proba = 0
+    i = 0
+    for arg in argv[1:len(argv)]:
+        if chiffre == arg:
+            i+= 1
+    proba = 1/6**(5-i)
+    proba *= 100
+    print("Chances to get a ", int(chiffre), " yams: ", "%.2f" %proba, "%", sep="")
+    
+def full(number):
+    x = number.group(0)
+    i = 0
+    y = number.group(1)
+    j = 0
+    for arg in argv[1:len(argv)]:
+        if x == arg:
+            i+= 1
+    for arg in argv[1:6]:
+        if y == arg:
+            j+= 1
+    proba = 0
+    if (x == 2 and j == 3):
+        proba = 100
+    else :
+        proba = caluclate_binomial(5 - j, 2 - x) * caluclate_binomial(5 - x, 3 - j)
+        proba * 100
+    print(f"Chances to get a {x} full of {y}: {floor (proba * 100) / 100}%")
+    
+if (len(argv) == 2):
+    if (argv[1] == "-h"):
+        put_h()
+    
+for arg in argv[1:len(argv) - 1]:
+    if not arg.isdigit():
+        print(f"L'argument {arg} n'est pas un chiffre.")
+        exit(84)
+
+tableau = list(argv[:len(argv) - 1])
+tableau.extend([0] * (5 - len(tableau) + 1));
+
+pattern = r'^(pair|three|four|straight|yams)_[1-6]$'
+pattern_full = r'^full_[1-6]_[1-6]$'
+def executer_fonction(valeur, number):
+    fonctions = {
+        r'^pair_[1-6]$': pair,
+        r'^three_[1-6]$': three,
+        r'^four_[1-6]$': four,
+        r'^straight_[1-6]$': straight,
+        r'^yams_[1-6]$': yams,
+        r'^full_[1-6]_[1-6]$': full
+    }
+    for motif, fonction in fonctions.items():
+        if re.match(motif, valeur):
+            fonction(number)
+            return
+
+if re.match(pattern, argv[len(argv) - 1]) or re.match(pattern_full, argv[len(argv) - 1]):
+    if (re.match(pattern_full, argv[len(argv) - 1])):
+        number = re.search(r'full_(\d+)_(\d+)$', argv[len(argv) - 1])
+    else:
+        number = re.search(r'\d$', argv[len(argv) - 1])
+    executer_fonction(argv[len(argv) - 1], number)
+else:
+    print(argv[len(argv) - 1])
+    print("Le format du sixième argument est incorrect.")
+    exit(84)
+    

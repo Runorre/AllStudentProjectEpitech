@@ -1,0 +1,45 @@
+KICK_OFF LEMIN :
+
+Skills : Algorithm, Data structure, Parsing, Optimization, Robustness
+
+Pathfinding and optimization algorithm
+
+Faire des graph
+Très bon parsing -> valide le projet
+Faire gestion erreur
+merci seb
+
+Djikstra : graph theory
+
+Graph, oriented graph, weighted graph (grah more interesting)
+
+Either linked list or adjacency matrix.
+
+NOM BINAIRE : lem_in
+
+Nombre de fourmis en haut
+
+représentation des rooms (alpha-numeric name), and a position (PAS IMPORTANT), There is a ##start and a ##end room
+
+On s'en fiche des pseudo distances, ce sont le nombre de déplacements qui sont importants
+
+ID des fourmis et les connexions -> importants
+
+Tunnels -> connexions entre les salles
+(THERE CAN BE COMMENTS ANYWHERE)
+
+./lem_in < anthill
+
+#moves
+envoyer les moves a chaque tick (possibilité d'une fourmis de bouger)
+Pn-r (n: the ant, r: the room)
+Parsing, pathfinding, error management sont les Skills principaux
+Case 0, seule case où les fourmis peuvent être à plusieurs sur même case
+
+En fonction du nombre de fourmis, il vaut mieux en faire partir certaines sur des chemins moins opti
+
+Toutes les fourmis peuvent arriver en même temps
+
+Vérifier si une entrée, une sortie.
+
+recup nb max et mettre nb vertex

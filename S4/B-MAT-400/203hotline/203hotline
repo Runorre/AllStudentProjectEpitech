@@ -1,0 +1,77 @@
+#!/usr/bin/env python3
+##
+## EPITECH PROJECT, 2024
+## B-MAT-400-MAR-4-1-203hotline-celestin.godefroy-mourier
+## File description:
+## 203hotline
+##
+
+from sys import *
+from math import *
+from time import *
+
+
+def binomial_coefficient(n, k):
+    return factorial(n) // (factorial(k) * factorial(n - k))
+
+
+def loi_binomial(n, k, p):
+    coef_binomial = binomial_coefficient(n, k)
+    return coef_binomial * (p ** k) * ((1 - p) ** (n - k))
+
+def loi_poisson(x, k):
+    return (exp(x * (-1)) * x ** k) / (factorial(k))
+
+
+def print_h():
+    print("USAGE\n    ./203hotline [n k | d]\n")
+    print("DESCRIPTION")
+    print("    n       n value for the computation of C(n, k)")
+    print("    k       k value for the computation of C(n, k)")
+    print("    d       average duration of calls (in seconds)")
+
+
+if (len(argv) != 2 and len(argv) != 3):
+    exit(84)
+
+if (argv[1].isdigit() == False):
+    exit(84)
+elif (len(argv) == 3 and (argv[2].isdigit() == False or argv[1].isdigit() == False)):
+    exit(84)
+
+if argv[1] == "-h":
+    print_h()
+    exit(0)
+
+if len(argv) == 3:
+    n = int(argv[1])
+    k = int(argv[2])
+    print("{}-combinations of a set of size {}:".format(k, n))
+    print(binomial_coefficient(n, k))
+if len(argv) == 2:
+    overload = 0
+    p = (int(argv[1])/ (8 * 60 * 60))
+    j = 0
+    start_time = int(time())
+    print("Binomial distribution:")
+    for k in range(0, 51):
+        bin = loi_binomial(3500, k, p)
+        if k > 25:
+            overload += bin
+        print(k, "->", "%.3f" % bin, end="\t" if (k + 1) % 5 and k < 50 else "\n")
+    end_time = int(time())
+    print("Overload:", "%.1f%%" % (overload * 100))
+    print("Computation time: ", "%.2f" % (end_time - start_time), "\n", sep='')
+    
+    overload = 0
+    p = (int(argv[1]) / (8 * 60 * 60)) * 3500
+    start_time = int(time())
+    print("Poisson distribution:")
+    for k in range(0, 51):
+        poiss = loi_poisson(p, k)
+        if k > 25:
+            overload += poiss
+        print(k, "->", "%.3f" % poiss, end="\t" if (k + 1) % 5 and k < 50 else "\n")
+    end_time = int(time())
+    print("Overload:", "%.1f%%" % (overload * 100))
+    print("Computation time: ", "%.2f" % (end_time - start_time), sep='')

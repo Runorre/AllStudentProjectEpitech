@@ -1,0 +1,83 @@
+#!/usr/bin/env python3
+##
+## EPITECH PROJECT, 2024
+## B-MAT-400-MAR-4-1-209poll-celestin.godefroy-mourier
+## File description:
+## 209poll
+##
+
+from sys import *
+from math import *
+
+
+def print_h():
+    print("USAGE")
+    print("\t./209poll pSize sSize p\n")
+    print("DESCRIPTION")
+    print("\tpSize\tsize of the population")
+    print("\tsSize\tsize of the sample (supposed to be representative)")
+    print("\tp \tpercentage of voting intentions for a specific candidate")
+
+def is_float(n):
+    try:
+        float_n = float(n)
+    except ValueError:
+        return False
+    else:
+        return True
+
+def is_integer(n):
+    try:
+        int_n = int(n)
+    except ValueError:
+        return False
+    else:
+        return True
+
+if (len(argv) == 2):
+    if (argv[1] == "-h"):
+        print_h()
+        exit(0)
+    else:
+        print("Invalid argument")
+        exit(84)
+
+if (len(argv) != 4):
+    print("Invalid number of arguments")
+    exit(84)
+
+if not (is_float(argv[1]) and is_float(argv[2]) and is_float(argv[3])):
+    print("Must be a number")
+    exit(84)
+
+if not (is_integer(argv[1]) and is_integer(argv[2])):
+    print("argv[1] and argv[2] must be integers.")
+    exit(84)
+
+if (float(argv[1]) < float(100) or float(argv[2]) < float(100) or float(argv[3]) < float(0) or float(argv[3]) > float(100)):
+    print("Invalid arguments")
+    exit(84)
+    
+pSize = float(argv[1])
+sSize = float(argv[2])
+if (sSize > pSize):
+    print("Sample size must be less than population size")
+    exit(84)
+p = float(argv[3])
+p /= 100
+variance = (p * (1 - p) / sSize) * ((pSize - sSize) / (pSize - 1))
+error_stand = sqrt(variance)
+error_95 = 1.96 * error_stand
+inf_95 = (p - error_95) * 100
+sup_95 = (p + error_95) * 100
+error_99 = 2.58 * error_stand
+inf_99 = (p - error_99) * 100
+sup_99 = (p + error_99) * 100
+
+print("Population size: ", pSize)
+print("Sample size: ", sSize)
+print("Voting intentions: {:.2f}%".format(p))
+print("Variance: {:.6f}".format(variance))
+print("95% confidence interval: [{:.2f}%; {:.2f}%]".format(inf_95, sup_95))
+print("99% confidence interval: [{:.2f}%; {:.2f}%]".format(inf_99, sup_99))
+

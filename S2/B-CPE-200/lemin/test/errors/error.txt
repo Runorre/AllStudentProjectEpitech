@@ -1,0 +1,12 @@
+3
+##start
+2 1 0
+##end
+78 13 0 #bedroomlole
+2 5 0
+# The next room is the kitchen
+3 9 0
+2-salut-3
+0-2
+3-1
+4-2

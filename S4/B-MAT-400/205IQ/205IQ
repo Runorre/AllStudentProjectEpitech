@@ -1,0 +1,69 @@
+#!/usr/bin/env python3
+##
+## EPITECH PROJECT, 2024
+## B-MAT-400-MAR-4-1-205IQ-celestin.godefroy-mourier
+## File description:
+## 205IQ
+##
+
+from math import *
+from sys import *
+from numpy import *
+
+def density(x, u, s):
+    return (1 / (s * sqrt(2 * pi))) * exp(-((x - u) ** 2) / (2 * (s ** 2)))
+
+def print_h():
+    print("USAGE\n    ./205IQ u s [IQ1] [IQ2]\n\nDESCRIPTION\n    u\t    mean\n    s\t    standard deviation\n    IQ1\t    minimum IQ\n    IQ2\t    maximum IQ")
+
+if (len(argv) < 3 or len(argv) > 5):
+    exit(84)
+if (argv[1] == "-h"):
+    print_h()
+    exit(0)
+
+if (len(argv) == 5 and (argv[1].isdigit() == False or argv[2].isdigit() == False or argv[3].isdigit() == False or argv[4].isdigit() == False)):
+    exit(84)
+if (len(argv) == 4 and (argv[1].isdigit() == False or argv[2].isdigit() == False or argv[3].isdigit() == False)):
+    exit(84)
+if (len(argv) == 3 and (argv[1].isdigit() == False or argv[2].isdigit() == False)):
+    exit(84)
+    
+if (len(argv) == 3 and argv[1].isdigit() and argv[2].isdigit()):
+    u = int(argv[1])
+    s = int(argv[2])
+    if (u < 0 or u > 200 or s < 0):
+        exit(84)
+    for i in range(0, 201):
+        print(f"{i} {density(i, u, s):.5f}")
+
+        
+if (len(argv) == 5 and argv[1].isdigit() and argv[2].isdigit() and argv[3].isdigit() and argv[4].isdigit()):
+    u = int(argv[1])
+    s = int(argv[2])
+    iq1 = int(argv[3])
+    iq2 = int(argv[4])
+    if (u < 0 or u > 200 or s < 0):
+        exit(84)
+    if (iq1 > iq2):
+        exit(84)
+    if (iq1 < 0 or iq1 > 200 or iq2 < 0 or iq2 > 200):
+        exit(84)
+    final_number = 0
+    for i in arange(iq1, iq2, 0.01):
+        final_number += density(i, u, s)
+    print(f"{final_number:.1f}% of people have an IQ between {iq1} and {iq2}")
+
+if (len(argv) == 4 and argv[1].isdigit() and argv[2].isdigit() and argv[3].isdigit()):
+    u = int(argv[1])
+    s = int(argv[2])
+    iq = int(argv[3])
+    if (u < 0 or u > 200 or s < 0):
+        exit(84)
+    if (iq < 0 or iq > 200):
+        exit(84)
+    final_number = 0
+    for i in arange(0, iq, 0.01):
+        final_number += density(i, u, s)
+    print(f"{final_number:.1f}% of people have an IQ inferior to {iq}")
+    

@@ -1,0 +1,7 @@
+#!/bin/sh
+if [ -z "$1" ] || [ $# -gt 1 ]
+then
+  exit 84
+else
+  python3 groundhog.py "$1"
+fi

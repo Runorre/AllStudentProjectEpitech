@@ -1,0 +1,1 @@
+../../coding-style-checker/./coding-style.sh ../B-CPE-200-MAR-2-1-lemin-angelo.anselmet/ ../../result_coding/ && cat ../../result_coding/coding-style-reports.log

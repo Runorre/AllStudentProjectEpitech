@@ -1,0 +1,176 @@
+#!/usr/bin/env python3
+##
+## EPITECH PROJECT, 2024
+## B-MAT-400-MAR-4-1-208dowels-celestin.godefroy-mourier
+## File description:
+## 208dowels
+##
+
+from sys import *
+from math import *
+from re import *
+
+def print_h():
+    print("USAGE")
+    print("    ./208dowels O0 O1 O2 O3 O4 O5 O6 O7 O8")
+    print("\nDESCRIPTION")
+    print("    Oi\t size of the observed class")   
+
+
+data = {
+    1: [0.00, 0.02, 0.06, 0.15, 0.27, 0.45, 0.71, 1.07, 1.64, 2.71, 3.84, 5.41, 6.63],
+    2: [0.02, 0.21, 0.45, 0.71, 1.02, 1.39, 1.83, 2.41, 3.22, 4.61, 5.99, 7.82, 9.21],
+    3: [0.11, 0.58, 1.01, 1.42, 1.87, 2.37, 2.95, 3.66, 4.64, 6.25, 7.81, 9.84, 11.34],
+    4: [0.30, 1.06, 1.65, 2.19, 2.75, 3.36, 4.04, 4.88, 5.99, 7.78, 9.49, 11.67, 13.28],
+    5: [0.55, 1.61, 2.34, 3.00, 3.66, 4.35, 5.13, 6.06, 7.29, 9.24, 11.07, 13.39, 15.09],
+    6: [0.87, 2.20, 3.07, 3.83, 4.57, 5.35, 6.21, 7.23, 8.56, 10.64, 12.59, 15.03, 16.81],
+    7: [1.24, 2.83, 3.82, 4.67, 5.49, 6.35, 7.28, 8.38, 9.80, 12.02, 14.07, 16.62, 18.48],
+    8: [1.65, 3.49, 4.59, 5.53, 6.42, 7.34, 8.35, 9.52, 11.03, 13.36, 15.51, 18.17, 20.09],
+    9: [2.09, 4.17, 5.38, 6.39, 7.36, 8.34, 9.41, 10.66, 12.24, 14.68, 16.92, 19.68, 21.67],
+    10: [2.56, 4.87, 6.18, 7.27, 8.30, 9.34, 10.47, 11.78, 13.44, 15.99, 18.31, 21.16, 23.21]
+}
+
+percentages = ['99%', '90%', '80%', '70%', '60%', '50%', '40%', '30%', '20%', '10%', '5%', '2%', '1%']
+
+def set_print(i, tab, tab_print, arg1, arg2):
+    if (int(arg1) + int(arg2) >= 10):
+        return
+
+if (len(argv) == 2 and argv[1] == "-h"):
+    print_h()
+    exit(0)
+    
+if (len(argv) != 10):
+    print("Invalid number of arguments")
+    exit(84)
+
+if (argv[1].isdigit() == False or argv[2].isdigit() == False or argv[3].isdigit() == False or argv[4].isdigit() == False or argv[5].isdigit() == False or argv[6].isdigit() == False or argv[7].isdigit() == False or argv[8].isdigit() == False or argv[9].isdigit() == False):
+    print("Invalid arguments")
+    exit(84)
+
+if (int(argv[1]) < 0 or int(argv[2]) < 0 or int(argv[3]) < 0 or int(argv[4]) < 0 or int(argv[5]) < 0 or int(argv[6]) < 0 or int(argv[7]) < 0 or int(argv[8]) < 0 or int(argv[9]) < 0):
+    print("Invalid arguments")
+    exit(84)
+
+tab = []
+for i in range(1, 10):
+    tab.append(int(argv[i]))
+new_tab_copy = tab.copy()
+
+def get_p(tab):
+    return_value = 0
+    all_values = 0
+    for i in range(len(tab)):
+        all_values += tab[i]
+        return_value += tab[i] * i
+    return return_value / all_values**2
+
+def get_c(k, n):
+    return factorial(n) / (factorial(k) * factorial(n - k))
+        
+def get_t(x, total, p):
+    return get_c(x, total) * p**x * (1 - p)**(total - x)
+
+def get_x(O, T):
+    return (O - T)**2 / T
+
+tab_print = []
+i = 0
+j = 0
+for i, nb in enumerate(new_tab_copy):
+    if (nb < 10):
+        if (i != 0 and i < len(new_tab_copy) - 1 and new_tab_copy[i - 1] < new_tab_copy[i + 1]):
+            if (str(i - 1) + "-" + str(i) in tab_print):
+                continue
+            tab_print.append(str(i - 1) + "-" + str(i))
+            new_tab_copy[i] = new_tab_copy[i] + new_tab_copy[i - 1]
+            if (str(i - 1) in tab_print):
+                tab_print.remove(str(i - 1))
+        if (i == 0):
+            tab_print.append(str(i) + "-" + str(i + 1))
+            new_tab_copy[i] = new_tab_copy[i] + new_tab_copy[i + 1]
+        if (i == 8):
+            tab_print.append(str(i-1) + "+")
+            new_tab_copy[i] = new_tab_copy[i] + new_tab_copy[i - 1]
+    elif (nb >= 10):
+        
+        if (i == 8):
+            tab_print.append(str(i) + "+")
+            j+=1
+        else:
+            tab_print.append(str(i))
+            j+=1
+
+
+number_tab = []
+for i in range(len(tab_print)):
+    nb = tab_print[i]
+    matches = findall(r'\d+-\d+', nb)
+    matches2 = findall(r'\d+\+', nb)
+    if (len(matches) != 0):
+        number_tab.append(tab[int(matches[0][0])] + tab[int(matches[0][2])])
+    elif (len(matches2) != 0):
+        nbr = 0
+        for j in range(int(matches2[0][0]), len(tab)):
+            nbr += tab[j]
+        number_tab.append(nbr)
+            
+    else:
+        number_tab.append(tab[int(nb)])
+
+print("x | ", end="")
+for i, nb in enumerate(tab_print):
+    print(nb, end=" | ")
+print("Total")
+print("Ox | ", end="")
+total = 0
+for i, nb in enumerate(number_tab):
+    total += nb
+    print(nb, end=" | ")
+print(total)
+p = get_p(tab)
+print("Tx | ", end="")
+
+
+fits = []
+print_fits = []
+sum_fits = 0
+for i, nb in enumerate(tab):
+    fits.append(get_t(i, total, p))
+j = 0
+for i in range(len(tab_print)):
+    nb = tab_print[i]
+    i += j
+    matches = findall(r'\d+-\d+', nb)
+    matches2 = findall(r'\d+\+', nb)
+    if (len(matches) != 0 and i < len(fits) - 1):
+        print_fits.append(fits[int(matches[0][0])] + fits[int(matches[0][2])])
+        sum_fits += fits[int(matches[0][0])] + fits[int(matches[0][2])]
+        j = 1
+    elif (len(matches2) != 0):
+        continue
+    else:
+        print_fits.append(fits[i])
+        sum_fits += fits[i]
+for i, nb in enumerate(print_fits):
+    print(round(nb * 100, 1), end=" | ")
+print(round(total - (sum_fits * 100), 1), end=" | ")
+print(total)
+print("Distribution:   B(%.0f, %.4f)" % (total, get_p(tab)))
+x2 = 0
+for i in range(len(number_tab)):
+    if (i == len(number_tab) - 1):
+        x2 += get_x(int(number_tab[i]), (total - (sum_fits * 100)))
+    else:
+        x2 += get_x(int(number_tab[i]), (float(print_fits[i]) * 100))
+print("Chi-squared:    %.3f" % (x2))
+print ("Degrees of freedom: %d" % (len(number_tab) - 2))
+
+values = data[len(number_tab) - 2]
+for i in range(len(values) - 1):
+        if values[i] <= x2 <= values[i + 1]:
+            print("Fit validity:    {} < P < {}".format(percentages[i + 1], percentages[i]))
+        if i == len(values) - 2 and values[i] <= x2:
+            print("Fit validity:    P < 1%")
+
+
